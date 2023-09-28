@@ -37,7 +37,7 @@ function StoreManagerImpl<T>(initialStore: Store<T>): StoreManager<T> {
 
 type InitStore = { count: number };
 
-const initialStore: Store<InitStore> = {
+export const initialStore: Store<InitStore> = {
   key: 'test',
   value: {
     count: 0,
