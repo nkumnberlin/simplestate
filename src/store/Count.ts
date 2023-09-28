@@ -1,6 +1,6 @@
 import { createMini } from '../simplestate/StateManager.ts';
 
-const CountMiniState = createMini('key', {
+const CountMiniState = createMini('test', {
   count: 0,
 });
 

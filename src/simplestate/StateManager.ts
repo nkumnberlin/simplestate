@@ -1,63 +1,45 @@
-interface Store {
-  name: string;
-  value: any;
-}
+type Store<T> = {
+  key: string;
+  value: T;
+};
+type StoreListener = () => void;
 
-interface StoreManager {
-  createStore: (name: string, value: any) => void;
-  updateStore: (name: string, value: any) => void;
-  getStore: (name: string) => Store | undefined;
-  onStoreCreated: (listener: (store: Store) => void) => void;
-  onStoreUpdated: (listener: (store: Store) => void) => void;
-}
+type StoreManager<T> = {
+  setStore: (fn: (newStore: Store<T>) => Store<T>) => void;
+  getSnapshot: () => Store<T>;
+  subscribe: (listener: StoreListener) => () => void;
+};
 
-let storeUpdatedListeners: ((store: Store) => void)[] = [];
+function StoreManagerImpl<T>(initialStore: Store<T>): StoreManager<T> {
+  const storeUpdatedListeners = new Set<() => void>();
+  let store: Store<T> = initialStore;
 
-const stores: Map<string, Store> = new Map();
+  const setStore = (fn: (newStore: Store<T>) => Store<T>) => {
+    store = fn(store);
+    storeUpdatedListeners.forEach((listener) => listener());
+  };
+  const getSnapshot = () => store;
 
-const StoreManagerImpl: StoreManager = {
-  createStore(name: string, value: any) {
-    const newStore: Store = { name, value };
-    stores.set(name, newStore);
-    emitStoreUpdated(newStore);
-  },
-
-  updateStore(name: string, value: any) {
-    const existingStore = stores.get(name);
-    if (existingStore) {
-      console.log('check, e,', existingStore);
-      existingStore.value = value;
-      emitStoreUpdated(existingStore);
-    }
-  },
-  getSnapshot(name: string): Store | undefined {
-    return stores.get(name);
-  },
-
-  onStoreUpdated: (listener: (store: Store) => void) => {
-    console.log('listener updated', listener);
-    storeUpdatedListeners.push(listener);
+  const subscribe = (listener: StoreListener) => {
+    storeUpdatedListeners.add(listener);
     return () => {
-      storeUpdatedListeners = storeUpdatedListeners.filter((l) => l !== listener);
+      storeUpdatedListeners.delete(listener);
     };
-  },
-};
+  };
 
-function emitStoreUpdated(store: Store) {
-  storeUpdatedListeners.forEach((listener) => listener(store));
+  return {
+    getSnapshot,
+    setStore,
+    subscribe,
+  };
 }
 
-const createMini = (name: string, value: any) => {
-  // registrieren, sonst nur getten?
-  StoreManagerImpl.createStore(name, value);
-  return name;
+type InitStore = { count: number };
+
+const initialStore: Store<InitStore> = {
+  key: 'test',
+  value: {
+    count: 0,
+  },
 };
-
-const useSimpleState = (storeName: string) => {
-  console.log(storeName);
-
-  // read, write
-  // return [StoreManagerImpl.getStore(storeName),]
-};
-
-export { createMini, useSimpleState, StoreManagerImpl };
+const store = StoreManagerImpl<InitStore>(initialStore);
