@@ -1,5 +1,3 @@
-import { useCallback } from 'react';
-
 type Store<T> = {
   key: string;
   value: T;
@@ -35,10 +33,6 @@ function StoreManagerImpl<T>(initialStore: Store<T>): StoreManager<T> {
     setStore,
     subscribe,
   };
-  // }, [store]);
-  // return {
-  //   ...storeFunc(),
-  // };
 }
 
 type InitStore = { count: number };
