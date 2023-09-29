@@ -32,7 +32,6 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh'],
   rules: {
-    // Allow the use of 'any' type
     '@typescript-eslint/no-explicit-any': 'off',
     'react/react-in-jsx-scope': 'off',
     'react-hooks/exhaustive-deps': 'off',

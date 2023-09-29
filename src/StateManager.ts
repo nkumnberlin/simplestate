@@ -18,15 +18,12 @@ function StoreManagerImpl<T>(initialStore: Store<T>): StoreManager<T> {
   }
   const storeUpdatedListeners = new Set<() => void>();
   let store: Store<T> = initialStore;
-  console.log('__________ store', store.value, '___', initialStore);
 
   const setStore = (newStore: Store<T>) => {
-    if (shallowEqual(newStore, store)) {
-      console.log('is equal', newStore, '_ old ', store);
+    if (shallowEqual(newStore.value, store.value)) {
       return getSnapshot();
     }
     store = newStore;
-    console.log('inform subs');
     storeUpdatedListeners.forEach((listener) => listener());
   };
   const getSnapshot = () => store;
@@ -49,8 +46,6 @@ function StoreManagerImpl<T>(initialStore: Store<T>): StoreManager<T> {
 
 const storeManagerCache = new Map<string, StoreManager<any>>();
 
-const store = (initialStore: Store<any>) => {
-  return StoreManagerImpl(initialStore);
-};
+const createStore = (initialStore: Store<any>) => StoreManagerImpl(initialStore);
 
-export { store };
+export { createStore };
