@@ -52,6 +52,9 @@ devDependencies:
   prettier:
     specifier: ^3.0.3
     version: 3.0.3
+  shallow-equal:
+    specifier: ^3.1.0
+    version: 3.1.0
   typescript:
     specifier: ^5.0.2
     version: 5.2.2
@@ -2438,6 +2441,10 @@ packages:
       define-data-property: 1.1.0
       functions-have-names: 1.2.3
       has-property-descriptors: 1.0.0
+    dev: true
+
+  /shallow-equal@3.1.0:
+    resolution: {integrity: sha512-pfVOw8QZIXpMbhBWvzBISicvToTiM5WBF1EeAUZDDSb5Dt29yl4AYbyywbJFSEsRUMr7gJaxqCdr4L3tQf9wVg==}
     dev: true
 
   /shebang-command@2.0.0:

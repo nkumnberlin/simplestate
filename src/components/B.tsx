@@ -1,10 +1,10 @@
-import { useSyncExternalStore } from 'react';
-import { store } from '../simplestate/StateManager.ts';
+import useSimpleState from '../simplestate/StateHook.ts';
+import { countStore } from '../simplestate/Store.ts';
 
 function B() {
-  const state = useSyncExternalStore(store.subscribe, store.getSnapshot);
-  console.log('rerender in B');
-  return <p>count is {state.value.count}</p>;
+  const [state, setStore] = useSimpleState(countStore);
+  console.log('rerender in B', state);
+  return <p>count is {state.count}</p>;
 }
 
 export default B;

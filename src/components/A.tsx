@@ -1,8 +1,16 @@
+import useSimpleState from '../simplestate/StateHook.ts';
+import { countStore } from '../simplestate/Store.ts';
+
 function A() {
-  const count = 2;
+  const [state, setStore] = useSimpleState(countStore);
+
   console.log('rerender in A');
 
-  return <>{count}</>;
+  return (
+    <button type={'button'} onClick={() => setStore({ count: state.count + 1 })}>
+      count is: .... {state.count}
+    </button>
+  );
 }
 
 export default A;
